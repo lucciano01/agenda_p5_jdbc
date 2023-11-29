@@ -15,7 +15,13 @@ public class App {
        // pessoaDAO.save(maria);
        // pessoaDAO.save(jose);
         //pessoaDAO.getAll().forEach(p -> System.out.println(p));
-        System.out.println(pessoaDAO.findById(2l));
+//        var pessoa = pessoaDAO.findById(2l);
+        var pessoa = new Pessoa();
+        pessoa.setId(2l);
+        pessoa.setCpf("00000000000");
+        pessoa.setNome("Pelé");
+
+        pessoaDAO.updatePessoa(pessoa);
 
 
     }

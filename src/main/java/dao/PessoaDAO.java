@@ -12,9 +12,11 @@ import java.util.List;
 public class PessoaDAO {
 
     private Connection connection;
+    private GenericDAO genericDAO;
 
     public PessoaDAO(){
         this.connection  = ConnectionPostgreSQL.getConnection();
+        this.genericDAO = new GenericDAO();
     }
 
     public void save(Pessoa pessoa){
@@ -64,6 +66,46 @@ public class PessoaDAO {
         rs.close();
         stmt.close();
        return pessoa;
+    }
+    public void update(Pessoa pessoa){
+       try{
+           String sql = "UPDATE PESSOA " +
+                   "SET NOME = ?, CPF = ?" +
+                   "WHERE ID = ? ";
+           var stmt = connection.prepareStatement(sql);
+           stmt.setObject(1, pessoa.getNome());
+           stmt.setObject(2, pessoa.getCpf());
+           stmt.setObject(3, pessoa.getId());
+       }catch(SQLException ex){
+           System.out.println(ex.getMessage());
+       }
+
+    }
+
+    public void updatePessoa(Pessoa pessoa) {
+        try {
+            String sql = "UPDATE PESSOA " +
+                    "SET NOME = ?, CPF = ?" +
+                    "WHERE ID = ? ";
+            var stmt = connection.prepareStatement(sql);
+            genericDAO.update(sql, pessoa.getNome(),
+                    pessoa.getCpf(), pessoa.getId());
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public void delete(Long id) throws SQLException {
+      try{
+          String sql = "DELETE FROM PESSOA WHERE ID = ?";
+          var stmt = connection.prepareStatement(sql);
+          stmt.setLong(1, id);
+          stmt.execute();
+          stmt.close();
+          System.out.println("Usuario removido com sucesso!");
+      }catch(SQLException ex){
+          System.out.println("Erro ao deletar usuario " +ex.getMessage());
+      }
 
     }
 }
